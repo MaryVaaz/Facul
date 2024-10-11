@@ -1,0 +1,40 @@
+import sqlite3
+
+# Conectando ao banco de dados
+conn = sqlite3.connect("funcionarios.db")
+cursor = conn.cursor()
+
+# Criando a tabela se ela não existir
+cursor.execute('''
+  CREATE TABLE IF NOT EXISTS funcionarios(
+    id INTEGER PRIMARY KEY,
+    nome TEXT,
+    cargo TEXT,
+    salario REAL
+  )
+''')
+
+# Coletando os dados do funcionário
+id_funcionario = input("Digite o id do funcionario: ")
+nome_funcionario = input("Digite o nome do funcionario: ")
+cargo_funcionario = input("Digite o cargo do funcionario: ")
+salario_funcionario = input("Digite o salario do funcionario: ")
+
+# Inserindo os dados na tabela
+cursor.execute("INSERT INTO funcionarios (id, nome, cargo, salario) VALUES (?, ?, ?, ?)",
+(id_funcionario, nome_funcionario, cargo_funcionario, salario_funcionario))
+
+# Salvando (commit) as alterações no banco de dados
+conn.commit()
+
+# Recuperando os funcionários cadastrados
+cursor.execute("SELECT * FROM funcionarios")
+funcionarios = cursor.fetchall()
+
+
+print("Funcionários cadastrados:")
+for funcionarios in funcionarios:
+  print(funcionarios)
+
+# Fechando a conexão
+conn.close()
